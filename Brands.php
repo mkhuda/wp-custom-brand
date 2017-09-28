@@ -12,34 +12,89 @@ License: GPLv2
 // Init Plugin Name
 add_action( 'init', 'create_brands' );
 function create_brands() {
+    $labels = array(
+  		'name'              => _x( 'Add New Brand', 'taxonomy general name', 'textdomain' ),
+  		'singular_name'     => _x( 'Brand', 'taxonomy singular name', 'textdomain' ),
+  		'search_items'      => __( 'Search Brands', 'textdomain' ),
+  		'all_items'         => __( 'All Brands', 'textdomain' ),
+  		'parent_item'       => __( 'Parent Brand', 'textdomain' ),
+  		'parent_item_colon' => __( 'Parent Brand:', 'textdomain' ),
+  		'edit_item'         => __( 'Edit Brand', 'textdomain' ),
+  		'update_item'       => __( 'Update Brand', 'textdomain' ),
+  		'add_new_item'      => __( 'Add New Brand', 'textdomain' ),
+  		'new_item_name'     => __( 'New Brand Name', 'textdomain' ),
+  		'menu_name'         => __( 'Brands', 'textdomain' ),
+  	);
+
+  	$args = array(
+  		'hierarchical'      => true,
+  		'labels'            => $labels,
+  		'show_ui'           => true,
+  		'show_admin_column' => true,
+  		'query_var'         => true,
+  		'rewrite'           => array( 'slug' => 'our-brand', 'with_front' => false ),
+  	);
+
+    register_taxonomy( 'brand', array( 'book' ), $args );
+
     register_post_type( 'brands',
         array(
             'labels' => array(
                 'name' => 'Custom Brands',
                 'singular_name' => 'Custom Brands',
+                'all_items' => 'Products',
                 'add_new' => 'Add New',
-                'add_new_item' => 'Add New Brand',
+                'add_new_item' => 'Add New Product',
                 'edit' => 'Edit',
-                'edit_item' => 'Edit Brand',
-                'new_item' => 'New Brand',
+                'edit_item' => 'Edit Product',
+                'new_item' => 'New Product',
                 'view' => 'View',
-                'view_item' => 'View Brand',
-                'search_items' => 'Search Brands',
-                'not_found' => 'No Brands found',
-                'not_found_in_trash' => 'No Brands found in Trash',
+                'view_item' => 'View Product',
+                'search_items' => 'Search Products',
+                'not_found' => 'No Products found',
+                'not_found_in_trash' => 'No Products found in Trash',
                 'parent' => 'Parent Brand'
             ),
 
             'public' => true,
             'menu_position' => 15,
             'supports' => array( 'title', 'editor', 'comments', 'thumbnail' ),
-            'taxonomies' => array( 'category' ),
+            'taxonomies' => array('brand'),
             'menu_icon' => plugins_url( 'brand.png', __FILE__ ),
             'has_archive' => true,
-            'rewrite' => array('slug' => 'our-brands'),
+            'rewrite' => array('slug' => 'our-brands/%brand%'),
         )
     );
 }
+
+function wpa_show_permalinks( $post_link, $post ){
+    if ( is_object( $post ) && $post->post_type == 'brands' ){
+        $terms = wp_get_object_terms( $post->ID, 'brand' );
+        if( $terms ){
+            return str_replace( '%brand%' , $terms[0]->slug , $post_link );
+        }
+    }
+    return $post_link;
+}
+add_filter( 'post_type_link', 'wpa_show_permalinks', 1, 2 );
+
+add_action( 'admin_menu', 'myprefix_adjust_the_wp_menu', 999 );
+function myprefix_adjust_the_wp_menu() {
+  // $page = remove_submenu_page( 'edit.php', 'post-new.php' );
+  //or for custom post type 'myposttype'.
+  $page = remove_submenu_page( 'edit.php?post_type=brands', 'post-new.php?post_type=brands' );
+}
+
+// ADD FIELD TO CATEGORY TERM PAGE
+add_action( 'brand_add_form_fields', '___add_form_field_term_meta_text' );
+function ___add_form_field_term_meta_text() { ?>
+    <?php wp_nonce_field( basename( __FILE__ ), 'term_meta_text_nonce' ); ?>
+    <div class="form-field term-meta-text-wrap">
+        <label for="term-meta-text"><?php _e( 'Brand Title', 'text_domain' ); ?></label>
+        <input type="text" name="term_meta_text" id="term-meta-text" value="" class="term-meta-text-field" />
+    </div>
+<?php }
+
 
 // Enqueue Script
 function brand_uploadscript() {
