@@ -13,7 +13,7 @@ License: GPLv2
 add_action( 'init', 'create_brands' );
 function create_brands() {
     $labels = array(
-  		'name'              => _x( 'Add New Brand', 'taxonomy general name', 'textdomain' ),
+  		'name'              => _x( 'Brand', 'taxonomy general name', 'textdomain' ),
   		'singular_name'     => _x( 'Brand', 'taxonomy singular name', 'textdomain' ),
   		'search_items'      => __( 'Search Brands', 'textdomain' ),
   		'all_items'         => __( 'All Brands', 'textdomain' ),
@@ -111,6 +111,9 @@ function ___add_form_field_term_meta_text() { ?>
 add_action( 'brand_edit_form_fields', '___edit_form_field_term_meta_text' );
 function ___edit_form_field_term_meta_text( $term ) {
     $value  = ___get_term_meta_text( $term->term_id );
+    $brand_header = get_term_meta( $term->term_id, 'brand_header', true );
+    $button_brand_header = '<a href="#" class="brand_upload_image_button button">Upload Brand Header</a>';
+    $display= "none";
     if ( ! $value )
         $value = ""; ?>
 
@@ -121,7 +124,32 @@ function ___edit_form_field_term_meta_text( $term ) {
             <input type="text" name="term_meta_text" id="term-meta-text" value="<?php echo esc_attr( $value ); ?>" class="term-meta-text-field"  />
         </td>
     </tr>
+    <tr>
+      <td style="width: 25% ">Product Header Image</td>
+      <td>
+        <?php echo $button_brand_header; ?>
+        <input type="hidden" name="brand_header" id="brand_header" value="<?php echo $brand_header; ?>" />
+        <a href="#" class="brand_remove_image_button" style="display: <?php echo $display; ?>;">Remove Brand Header</a>
+      </td>
+    </tr>
 <?php }
+
+add_action("brand_edit_form_fields", 'edit_form_fields_example', 10, 2);
+function edit_form_fields_example($term, $taxonomy){
+    ?>
+    <tr valign="top">
+        <th scope="row">Description</th>
+        <td>
+            <?php wp_editor(html_entity_decode($term->description), 'description', array('media_buttons' => true)); ?>
+            <script>
+                jQuery(window).ready(function(){
+                    jQuery('label[for=description]').parent().parent().remove();
+                });
+            </script>
+        </td>
+    </tr>
+    <?php
+}
 
 // SAVE TERM META (on term edit & create)
 add_action( 'edit_brand',   '___save_term_meta_text' );
@@ -146,12 +174,32 @@ function brand_uploadscript() {
      * like:
      * if ( !in_array('post-new.php','post.php') ) return;
      */
-    if ( ! did_action( 'wp_enqueue_media' ) ) {
+    // if ( ! did_action( 'wp_enqueue_media' ) ) {
         wp_enqueue_media();
-    }
+    // }
 
     wp_enqueue_script( 'uploadscript', plugin_dir_url( __FILE__ ) . 'brands.js', array('jquery'), null, false );
 }
+
+add_action('admin_head', 'remove_default_category_description');
+function remove_default_category_description()
+{
+    global $current_screen;
+    if ( $current_screen->id == 'edit-category' )
+    {
+    ?>
+      <script type="text/javascript">
+              jQuery(function($) {
+                  $('textarea#description').closest('tr.form-field').remove();
+              });
+      </script>
+    <?php
+    }
+}
+
+// remove the html filtering
+remove_filter( 'pre_term_description', 'wp_filter_kses' );
+remove_filter( 'term_description', 'wp_kses_data' );
 
 add_action( 'admin_enqueue_scripts', 'brand_uploadscript' );
 
@@ -180,19 +228,19 @@ function display_brand_meta_box( $brand ) {
     ?>
     <table>
         <tr>
-            <td style="width: 25%">Brand Name</td>
+            <td style="width: 25%">Product Name</td>
             <td><input type="text" size="100" name="brand_name" value="<?php echo $brand_name; ?>" /></td>
         </tr>
         <tr>
-            <td style="width: 25% ">Brand Title</td>
+            <td style="width: 25% ">Product Title</td>
             <td><input type="text" size="80" name="brand_title" value="<?php echo $brand_title; ?>" /></td>
         </tr>
         <tr>
-            <td style="width: 25% ">Brand Tagline</td>
+            <td style="width: 25% ">Product Tagline</td>
             <td><input type="text" size="80" name="brand_tagline" value="<?php echo $brand_tagline; ?>" /></td>
         </tr>
         <tr>
-          <td style="width: 25% ">Brand Header Image</td>
+          <td style="width: 25% ">Product Header Image</td>
           <td>
             <?php echo $button_brand_header; ?>
             <input type="hidden" name="brand_header" id="brand_header" value="<?php echo $brand_header; ?>" />
