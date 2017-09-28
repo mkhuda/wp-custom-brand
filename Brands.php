@@ -62,9 +62,21 @@ function create_brands() {
             'taxonomies' => array('brand'),
             'menu_icon' => plugins_url( 'brand.png', __FILE__ ),
             'has_archive' => true,
-            'rewrite' => array('slug' => 'our-brands/%brand%'),
+            'rewrite' => array('slug' => '%brand%'),
         )
     );
+    register_meta( 'term', '__term_meta_text', '___sanitize_term_meta_text' );
+}
+
+// SANITIZE DATA
+function ___sanitize_term_meta_text ( $value ) {
+    return sanitize_text_field ($value);
+}
+// GETTER (will be sanitized)
+function ___get_term_meta_text( $term_id ) {
+  $value = get_term_meta( $term_id, '__term_meta_text', true );
+  $value = ___sanitize_term_meta_text( $value );
+  return $value;
 }
 
 function wpa_show_permalinks( $post_link, $post ){
@@ -94,6 +106,37 @@ function ___add_form_field_term_meta_text() { ?>
         <input type="text" name="term_meta_text" id="term-meta-text" value="" class="term-meta-text-field" />
     </div>
 <?php }
+
+// ADD FIELD TO CATEGORY EDIT PAGE
+add_action( 'brand_edit_form_fields', '___edit_form_field_term_meta_text' );
+function ___edit_form_field_term_meta_text( $term ) {
+    $value  = ___get_term_meta_text( $term->term_id );
+    if ( ! $value )
+        $value = ""; ?>
+
+    <tr class="form-field term-meta-text-wrap">
+        <th scope="row"><label for="term-meta-text"><?php _e( 'TERM META TEXT', 'text_domain' ); ?></label></th>
+        <td>
+            <?php wp_nonce_field( basename( __FILE__ ), 'term_meta_text_nonce' ); ?>
+            <input type="text" name="term_meta_text" id="term-meta-text" value="<?php echo esc_attr( $value ); ?>" class="term-meta-text-field"  />
+        </td>
+    </tr>
+<?php }
+
+// SAVE TERM META (on term edit & create)
+add_action( 'edit_brand',   '___save_term_meta_text' );
+add_action( 'create_brand', '___save_term_meta_text' );
+function ___save_term_meta_text( $term_id ) {
+    // verify the nonce --- remove if you don't care
+    if ( ! isset( $_POST['term_meta_text_nonce'] ) || ! wp_verify_nonce( $_POST['term_meta_text_nonce'], basename( __FILE__ ) ) )
+        return;
+    $old_value  = ___get_term_meta_text( $term_id );
+    $new_value = isset( $_POST['term_meta_text'] ) ? ___sanitize_term_meta_text ( $_POST['term_meta_text'] ) : '';
+    if ( $old_value && '' === $new_value )
+        delete_term_meta( $term_id, '__term_meta_text' );
+    else if ( $old_value !== $new_value )
+        update_term_meta( $term_id, '__term_meta_text', $new_value );
+}
 
 
 // Enqueue Script
