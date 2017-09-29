@@ -1,45 +1,35 @@
 <?php
-add_action( 'brand_add_form_fields', '___edit_form_field_term_meta_text' );
+add_action( 'brand_add_form_fields', '___edit_form_field_term_meta_text', 10, 2 );
 function ___edit_form_field_term_meta_text( $term ) {
-    $brand_title  = ___get_term_meta_text( $term->term_id );
-    $brand_image = ___get_term_brand_image( $term->term_id );
-    $brand_logo = ___get_term_brand_logo( $term->term_id );
-    $brand_tagline = ___get_term_brand_tagline( $term->term_id );
-    $button_brand_header = '<a href="#" class="brand_upload_image_button button">Upload Brand Header</a>';
-    $display_brand_header= "none";
-    if( $image_attributes = wp_get_attachment_image_src( $brand_image, 'medium' ) ) {
-
-        $button_brand_header = '<a href="#" class="product_upload_image_button"><img src="' . $image_attributes[0] . '" style="max-width:95%;display:block;" /></a>';
-        $display_brand_header = 'inline-block';
-
-    }
     ?>
 
     <div class="form-field term-meta-text-wrap">
         <label for="term-meta-text"><?php _e( 'Brand Title', 'text_domain' ); ?></label>
         <p>
             <?php wp_nonce_field( basename( __FILE__ ), 'term_meta_text_nonce' ); ?>
-            <input type="text" name="term_meta_text" id="term-meta-text" value="<?php echo esc_attr( $brand_title ); ?>" class="term-meta-text-field"  />
+            <input type="text" name="term_meta_text" id="term-meta-text" value="" class="term-meta-text-field"  />
         </p>
     </div>
     <div class="form-field term-meta-text-wrap">
       <label for="term-meta-text"><?php _e( 'Brand Header', 'text_domain' ); ?></label>
       <p>
-        <?php echo $button_brand_header; ?>
-        <input type="hidden" name="term_brand_header" id="brand_upload_image_button" value="<?php echo $brand_image; ?>" />
-        <a href="#" class="product_remove_image_button" style="display: <?php echo $display_brand_header; ?>;">Remove Brand Header</a>
+        <a href="#" class="brand_upload_image_button button">Upload Brand Header</a>
+        <input type="hidden" name="term_brand_header" id="brand_upload_image_button" value="" />
+        <a href="#" class="product_remove_image_button" style="display: none;">Remove Brand Header</a>
       </p>
     </div>
     <div class="form-field term-meta-text-wrap">
       <label for="term-meta-text"><?php _e( 'Brand Logo', 'text_domain' ); ?></label>
       <p>
-        <input type="text" name="term_brand_logo" id="term-meta-text" value="<?php echo esc_attr( $brand_logo ); ?>" class="term-meta-text-field"  />
+        <a href="#" class="brand_upload_image_button button">Upload Brand Logo</a>
+        <input type="hidden" name="term_brand_logo" id="brand_upload_image_button" value="" />
+        <a href="#" class="product_remove_image_button" style="display: none;">Remove Brand Logo</a>
       </p>
     </div>
     <div class="form-field term-meta-text-wrap">
       <label for="term-meta-text"><?php _e( 'Brand Tagline', 'text_domain' ); ?></label>
       <p>
-        <textarea type="text" name="term_brand_tagline" id="term-meta-text" value="<?php echo esc_attr( $brand_tagline ); ?>" class="term-meta-text-field" row="20"><?php echo esc_attr( $brand_tagline ); ?></textarea>
+        <textarea type="text" name="term_brand_tagline" id="term-meta-text" class="term-meta-text-field" row="20"></textarea>
       </p>
     </div>
 <?php }
@@ -72,6 +62,14 @@ function edit_form_fields_example($term, $taxonomy){
         $display_brand_header = 'inline-block';
 
     }
+    $button_brand_logo = '<a href="#" class="brand_upload_image_button button">Upload Brand Logo</a>';
+    $display_brand_logo= "none";
+    if( $image_attributes = wp_get_attachment_image_src( $brand_logo, 'medium' ) ) {
+
+        $button_brand_logo = '<a href="#" class="product_upload_image_button"><img src="' . $image_attributes[0] . '" style="max-width:95%;display:block;" /></a>';
+        $display_brand_logo = 'inline-block';
+
+    }
     ?>
 
     <tr class="form-field term-meta-text-wrap">
@@ -94,7 +92,9 @@ function edit_form_fields_example($term, $taxonomy){
     <tr class="form-field term-meta-text-wrap">
       <th><label for="term-meta-text"><?php _e( 'Brand Logo', 'text_domain' ); ?></label></th>
       <td>
-        <input type="text" name="term_brand_logo" id="term-meta-text" value="<?php echo esc_attr( $brand_logo ); ?>" class="term-meta-text-field"  />
+        <?php echo $button_brand_logo; ?>
+        <input type="hidden" name="term_brand_logo" id="brand_upload_image_button" value="<?php echo $brand_logo; ?>" />
+        <a href="#" class="product_remove_image_button" style="display: <?php echo $display_brand_logo; ?>;">Remove Brand Header</a>
       </td>
     </tr>
     <tr class="form-field term-meta-text-wrap">
