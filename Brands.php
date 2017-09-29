@@ -364,6 +364,7 @@ function add_brand_fields( $product_id, $product ) {
 }
 
 // Templating
+// For Brand
 add_filter( 'taxonomy_template', function( $template )
 {
   $mytemplate = __DIR__ . '/custom-brand-template.php';
@@ -374,4 +375,21 @@ add_filter( 'taxonomy_template', function( $template )
   return $template;
 } );
 
+/* Filter the single_template with our custom function*/
+add_filter('single_template', 'custom_post_template');
+
+function custom_post_template($single) {
+
+    global $wp_query, $post;
+
+    /* Checks for single template by post type */
+    if ( $post->post_type == 'products' ) {
+        if ( file_exists( __DIR__ . '/custom-products-template.php' ) ) {
+            return __DIR__ . '/custom-products-template.php';
+        }
+    }
+
+    return $single;
+
+}
 ?>
