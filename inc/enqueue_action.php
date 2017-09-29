@@ -1,15 +1,20 @@
 <?php
 add_action( 'admin_enqueue_scripts', 'brand_uploadscript' );
-function brand_uploadscript() {
-    /*
-     * I recommend to add additional conditions just to not to load the scipts on each page
-     * like:
-     * if ( !in_array('post-new.php','post.php') ) return;
-     */
-    if ( ! did_action( 'wp_enqueue_media' ) ) {
-        wp_enqueue_media();
-    }
+function brand_uploadscript( $hook_suffix ) {
+  $custom_post_type = 'products';
+  if ( ! did_action( 'wp_enqueue_media' ) ) {
+      wp_enqueue_media();
+  }
+  
+  if( in_array($hook_suffix, array('post.php', 'post-new.php', 'edit-tags.php', 'term.php') ) ){
+      $screen = get_current_screen();
 
-    wp_enqueue_script( 'productuploadscript', plugin_dir_url( __FILE__ ) . '../assets/brands.js', array('jquery'), null, false );
+      if( is_object( $screen ) && $custom_post_type == $screen->post_type ){
+
+          // Register, enqueue scripts and styles here
+          wp_enqueue_script( 'productuploadscript', plugin_dir_url( __FILE__ ) . '../assets/js/brands.js', array('jquery'), null, false );
+      }
+  }
+
 }
 ?>
