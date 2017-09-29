@@ -1,5 +1,7 @@
 # wp-custom-brand
-WordPress Plugin to create Brands and Product Pages
+WordPress Plugin to create Brands and Product Pages.
+
+Sometimes you just want to add a Brand with their own Products. Add their own Brand Image, Logo, or maybe Tagline. Showing all Brands by Shortcode on somewhere. Also displaying all products of a Brand. So, maybe you need this open source Plugin.
 
 ## Usage
 1. Clone this plugin
