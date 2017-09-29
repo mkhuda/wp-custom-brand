@@ -1,6 +1,6 @@
 <?php
-add_action( 'brand_add_form_fields', '___edit_form_field_term_meta_text', 10, 2 );
-function ___edit_form_field_term_meta_text( $term ) {
+add_action( 'brand_add_form_fields', '___add_brand_form_field', 10, 2 );
+function ___add_brand_form_field() {
     ?>
 
     <div class="form-field term-meta-text-wrap">
@@ -34,8 +34,8 @@ function ___edit_form_field_term_meta_text( $term ) {
     </div>
 <?php }
 
-add_action("brand_edit_form_fields", 'edit_form_fields_example', 10, 2);
-function edit_form_fields_example($term, $taxonomy){
+add_action("brand_edit_form_fields", '__edit_brand_form_field', 10, 2);
+function __edit_brand_form_field($term){
     ?>
     <tr valign="top">
         <th scope="row">Description</th>
