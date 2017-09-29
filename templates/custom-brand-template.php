@@ -1,28 +1,9 @@
 <?php get_header();
-
-// Layout
-$sidebar = get_post_meta( get_the_ID(), 'minti_layout', true );
-
-if($sidebar == 'default'){
-	$sidebarlayout = 'sixteen columns';
-}
-elseif($sidebar == 'fullwidth'){
-	$sidebarlayout = 'page-section nopadding';
-}
-elseif($sidebar == 'sidebar-left'){
-	$sidebarlayout = 'sidebar-left twelve alt columns';
-}
-elseif($sidebar == 'sidebar-right'){
-	$sidebarlayout = 'sidebar-right twelve alt columns';
-}
-else{
-	$sidebarlayout = 'sixteen columns';
-} ?>
-
-<div id="page-wrap" <?php if($sidebar != 'fullwidth'){ echo 'class="container"'; } ?> >
-
-	<div id="content" class="sidebar-right">
-    <?php
+?>
+<div id="page-wrap" class="container">
+	<div id="content" class="fullwidth">
+		<?php
+		
       $name = get_term(get_queried_object()->term_id, 'brand')->name;
       $slugis = get_term(get_queried_object()->term_id, 'brand')->slug;
       $custom_terms = get_terms('brand');
@@ -49,12 +30,6 @@ else{
       }
     ?>
 	</div> <!-- end content -->
-
-	<?php if($sidebar == 'sidebar-left' || $sidebar == 'sidebar-right'){ ?>
-	<div id="sidebar" class="<?php echo esc_attr($sidebar); ?> alt">
-		<?php get_sidebar(); ?>
-	</div>
-	<?php } ?>
 
 </div> <!-- end page-wrap -->
 
