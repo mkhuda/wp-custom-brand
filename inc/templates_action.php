@@ -1,7 +1,7 @@
 <?php 
 add_filter( 'taxonomy_template', function( $template )
 {
-  $mytemplate = __DIR__ . '/templates/custom-brand-template.php';
+  $mytemplate = realpath(__DIR__ . '/..') . '/templates/custom-brand-template.php';
 
   if( is_tax( 'brand' ) && is_readable( $mytemplate ) )
   $template =  $mytemplate;
@@ -18,8 +18,11 @@ function custom_post_template($single) {
 
     /* Checks for single template by post type */
     if ( $post->post_type == 'products' ) {
-        if ( file_exists( __DIR__ . '/templates/custom-products-template.php' ) ) {
-            return __DIR__ . '/templates/custom-products-template.php';
+        if ( file_exists( realpath(__DIR__ . '/..') . '/templates/custom-products-template.php' ) ) {
+            return realpath(__DIR__ . '/..') . '/templates/custom-products-template.php';
+        } else {
+          echo 'crash '.realpath(__DIR__ . '/..');
+          exit();
         }
     }
 
