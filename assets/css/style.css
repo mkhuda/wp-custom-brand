@@ -1,0 +1,13 @@
+.slick-prev:before,
+.slick-next:before {
+  color: #222 !important;
+}
+
+.slick-inner {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  padding: 30px;
+  background: #c2c2c2;
+  border: 5px solid white;
+}
