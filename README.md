@@ -15,9 +15,9 @@ Sometimes you just want to add a Brand with their own Products. Add their own Br
 4. Finally, you just need to update the *Permalinks Setting* on `WordPress Settings` before you get in Rocks!
 
 ## Features
-1. Shortcode (Not yet)
-2. Carrousel by jQuery (Not yet)
-3. and Many more after I release it.
+1. Shortcode (Ready)
+2. Carrousel by *Kenwheeler Slick* (Ready)
+3. and ...
 
 ---
 License: GNU GPL
