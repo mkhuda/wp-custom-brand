@@ -2,17 +2,17 @@
 add_action( 'init', 'create_brands' );
 function create_brands() {
     $labels = array(
-  		'name'              => _x( 'Brand', 'taxonomy general name', 'textdomain' ),
-  		'singular_name'     => _x( 'Brand', 'taxonomy singular name', 'textdomain' ),
-  		'search_items'      => __( 'Search Brands', 'textdomain' ),
-  		'all_items'         => __( 'All Brands', 'textdomain' ),
-  		'parent_item'       => __( 'Parent Brand', 'textdomain' ),
-  		'parent_item_colon' => __( 'Parent Brand:', 'textdomain' ),
-  		'edit_item'         => __( 'Edit Brand', 'textdomain' ),
-  		'update_item'       => __( 'Update Brand', 'textdomain' ),
-  		'add_new_item'      => __( 'Add New Brand', 'textdomain' ),
-  		'new_item_name'     => __( 'New Brand Name', 'textdomain' ),
-  		'menu_name'         => __( 'Brands', 'textdomain' ),
+  		'name'              => _x( 'Brand', 'taxonomy general name', 'wp_custom_brands' ),
+  		'singular_name'     => _x( 'Brand', 'taxonomy singular name', 'wp_custom_brands' ),
+  		'search_items'      => __( 'Search Brands', 'wp_custom_brands' ),
+  		'all_items'         => __( 'All Brands', 'wp_custom_brands' ),
+  		'parent_item'       => __( 'Parent Brand', 'wp_custom_brands' ),
+  		'parent_item_colon' => __( 'Parent Brand:', 'wp_custom_brands' ),
+  		'edit_item'         => __( 'Edit Brand', 'wp_custom_brands' ),
+  		'update_item'       => __( 'Update Brand', 'wp_custom_brands' ),
+  		'add_new_item'      => __( 'Add New Brand', 'wp_custom_brands' ),
+  		'new_item_name'     => __( 'New Brand Name', 'wp_custom_brands' ),
+  		'menu_name'         => __( 'Brands', 'wp_custom_brands' ),
   	);
 
   	$args = array(
