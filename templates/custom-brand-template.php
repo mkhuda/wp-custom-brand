@@ -1,6 +1,6 @@
 <?php get_header();
 ?>
-<div id="page-wrap" class="container">
+<div id="page-wrap" class="wrap">
 	<div id="content" class="fullwidth">
 		<?php
 		
@@ -28,7 +28,9 @@
             endwhile;
          }
       }
+			echo do_shortcode("[wp_custom_brand]");
     ?>
+		
 	</div> <!-- end content -->
 
 </div> <!-- end page-wrap -->

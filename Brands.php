@@ -27,6 +27,9 @@ require_once 'inc/product-form_action.php';
 // Custom templating for Brands and Products Pages
 require_once 'inc/templates_action.php';
 
+// Shortcode
+require_once 'inc/shortcode_action.php';
+
 // remove the html filtering
 remove_filter( 'pre_term_description', 'wp_filter_kses' );
 remove_filter( 'term_description', 'wp_kses_data' );
